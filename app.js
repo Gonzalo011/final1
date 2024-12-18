@@ -1,19 +1,21 @@
-import express from 'express'
-import employeesRoutes from './routes/employees.routes.js'
-import indexRoutes from './routes/index.routes.js'
+import express from 'express';
+import movieRoutes from '../backend/routes/movie.routes.js';
+import cors from 'cors';
+import path from 'path'; 
 
+const app = express();
 
-const app = express()
+// Habilita CORS para permitir solicitudes desde diferentes dominios
+app.use(cors());
 
-app.use(express.json())
+// Analiza el cuerpo de las solicitudes como JSON
+app.use(express.json());
 
-app.use('/api', employeesRoutes)
-app.use(indexRoutes)
+// Define la ruta base para las películas
+app.use('/api/movies', movieRoutes);
 
-app.use((req, res, next) => {
-    res.status(404).json({
-        Mensaje: 'endpoint No encontrado'
-    })
-})
+// Servir archivos estáticos desde la carpeta 'uploads'
+app.use('/uploads', express.static(path.resolve('uploads')));
+console.log('Carpeta estática "uploads":', path.resolve('uploads'));
 
-export default app; 
+export default app;
